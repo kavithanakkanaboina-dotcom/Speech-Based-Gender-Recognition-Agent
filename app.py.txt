@@ -1,0 +1,47 @@
+import streamlit as st
+import pickle
+import numpy as np
+
+# Load the trained model
+with open("Speech-Based Gender Recognition Agent.pkl", "rb") as file:
+    model = pickle.load(file)
+
+st.title("Speech-Based Gender Recognition Agent")
+
+st.write("Enter the voice feature values below:")
+
+meanfreq = st.number_input("meanfreq")
+sd = st.number_input("sd")
+median = st.number_input("median")
+Q25 = st.number_input("Q25")
+Q75 = st.number_input("Q75")
+IQR = st.number_input("IQR")
+skew = st.number_input("skew")
+kurt = st.number_input("kurt")
+sp_ent = st.number_input("sp.ent")
+sfm = st.number_input("sfm")
+mode = st.number_input("mode")
+centroid = st.number_input("centroid")
+meanfun = st.number_input("meanfun")
+minfun = st.number_input("minfun")
+maxfun = st.number_input("maxfun")
+meandom = st.number_input("meandom")
+mindom = st.number_input("mindom")
+maxdom = st.number_input("maxdom")
+dfrange = st.number_input("dfrange")
+modindx = st.number_input("modindx")
+
+if st.button("Predict Gender"):
+
+    features = np.array([[meanfreq, sd, median, Q25, Q75, IQR,
+                          skew, kurt, sp_ent, sfm, mode,
+                          centroid, meanfun, minfun, maxfun,
+                          meandom, mindom, maxdom, dfrange,
+                          modindx]])
+
+    prediction = model.predict(features)[0]
+
+    if prediction == 0 or prediction == "female":
+        st.success("Predicted Gender : Female")
+    else:
+        st.success("Predicted Gender : Male")
